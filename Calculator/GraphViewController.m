@@ -34,13 +34,6 @@
 	return [self.splitViewController.viewControllers objectAtIndex:0];	
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-	// Synchronize the view with the model
-	if (self) { }	
-	return self;
-}
-
 - (void)awakeFromNib {
 	[super awakeFromNib];
 	self.splitViewController.delegate = self;
