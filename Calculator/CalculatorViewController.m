@@ -128,9 +128,15 @@
 
 - (IBAction)pointPressed {  
 	
-	NSRange range = [self.display.text rangeOfString:@"."]; 		
-	if (range.location == NSNotFound) {
-		self.display.text = [self.display.text stringByAppendingString:@"."];
+	// If the user isn't in the middle of entering number then display 
+	// should be set to 0.
+	if (!self.userIsInTheMiddleOfEnteringNumber) {
+		self.display.text = @"0.";		
+	} else { // Add a . into the number if there isn't already one there
+		NSRange range = [self.display.text rangeOfString:@"."]; 		
+		if (range.location == NSNotFound) {
+			self.display.text = [self.display.text stringByAppendingString:@"."];
+		}			
 	}        
 	self.userIsInTheMiddleOfEnteringNumber = YES;    
 }
