@@ -11,13 +11,12 @@
 #import "GraphView.h"
 #import "CalculatorViewController.h"
 
-@interface GraphViewController () <GraphViewDataSource>
+@interface GraphViewController () <GraphViewDataSource, MasterViewControllerPopoverDelegate>
 
 @property (nonatomic, weak) IBOutlet GraphView *graphView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
-@property (strong, nonatomic) UIPopoverController *masterPopOverController;
-
+@property (strong, nonatomic) UIPopoverController *popover;
 
 @end
 
@@ -26,16 +25,14 @@
 @synthesize program = _program;
 @synthesize graphView = _graphView;
 @synthesize toolbar = _toolbar;
-@synthesize masterPopOverController	= _masterPopOverController;
+@synthesize popover = _popover;
 
-- (void)viewDidLoad {
-	
-	// Set the master view controller to be a popover controller
-	self.masterPopOverController = [[UIPopoverController alloc] 
-											  initWithContentViewController:
-											  [self.splitViewController.viewControllers objectAtIndex:0]];	
+@synthesize masterViewController = _masterViewController;
+
+
+- (id)masterViewController {
+	return [self.splitViewController.viewControllers objectAtIndex:0];	
 }
-
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
@@ -50,7 +47,7 @@
 - (BOOL)splitViewController:(UISplitViewController *)svc 
 	shouldHideViewController:(UIViewController *)vc 
 				  inOrientation:(UIInterfaceOrientation)orientation {	
-
+	
 	// Hide the the master controller in portrait mode
 	return UIInterfaceOrientationIsPortrait(orientation);
 }
@@ -63,9 +60,11 @@
 	// Show the bar button item on the toolbar
 	barButtonItem.title = aViewController.title;
 	
+	//self.popover = [[UIPopoverController alloc] initWithContentViewController:aViewController];
+	
 	barButtonItem.target = self;
 	barButtonItem.action = @selector(barButtonPressed:);
-		
+	
 	// Add the button to the toolbar
 	NSMutableArray *toolbarItems = [self.toolbar.items mutableCopy];
 	[toolbarItems insertObject:barButtonItem atIndex:0];
@@ -76,12 +75,17 @@
 
 - (void)barButtonPressed:(id) sender {	
 	
-	[self.masterPopOverController presentPopoverFromBarButtonItem:sender 
-						permittedArrowDirections:UIPopoverArrowDirectionAny 
-												 animated:YES];
+	//[self.popover presentPopoverFromBarButtonItem:sender 
+	//						permittedArrowDirections:UIPopoverArrowDirectionAny 
+	//											 animated:YES];
   	
+   [self performSegueWithIdentifier:@"ShowCalculator" sender:self];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+	[segue.destinationViewController setPopoverDelegate:self];	
+	self.popover = ((UIStoryboardPopoverSegue *)segue).popoverController;
+}
 
 - (void) splitViewController:(UISplitViewController *)svc 
 		willShowViewController:(UIViewController *)aViewController 
@@ -92,12 +96,12 @@
 	[toolbarItems removeObject:barButtonItem];
 	self.toolbar.items = toolbarItems;
 	
-	if (self.masterPopOverController) [ self.masterPopOverController dismissPopoverAnimated:YES];
+	if (self.popover) [self.popover dismissPopoverAnimated:YES];
 	
 }
 
 - (void)refreshProgramDependancies {
-
+	
 	// Need a program to recall scale and axis origin
 	if (! self.program) return;
 	
@@ -134,13 +138,13 @@
 	
 	// Refresh the graph View
 	[self.graphView setNeedsDisplay];
-
+	
 }
 
 - (void) setProgram:(id)program {
 	
 	_program = program;
-
+	
 	// We want to set the title of the controller if the program changes
 	self.title = [NSString stringWithFormat:@"y = %@", 
 					  [CalculatorBrain descriptionOfProgram:self.program]];
@@ -155,7 +159,7 @@
 	[self.graphView addGestureRecognizer:[[UIPinchGestureRecognizer alloc] 
 													  initWithTarget:self.graphView 
 													  action:@selector(pinch:)]];
-
+	
 	// enable pan gesture in the GraphView using pan: handler
 	[self.graphView addGestureRecognizer:[[UIPanGestureRecognizer alloc]
 													  initWithTarget:self.graphView
@@ -163,8 +167,8 @@
 	
 	// enable triple tap gesture in the GraphView using tripleTap: handler	
 	UITapGestureRecognizer *tapGestureRecognizer = 
-		[[UITapGestureRecognizer alloc] initWithTarget:self.graphView 
-															 action:@selector(tripleTap:)];	
+	[[UITapGestureRecognizer alloc] initWithTarget:self.graphView 
+														 action:@selector(tripleTap:)];	
 	tapGestureRecognizer.numberOfTapsRequired = 3;
 	[self.graphView addGestureRecognizer:tapGestureRecognizer];	
 	
@@ -204,16 +208,16 @@
 	
 	// Save the axis origin
 	[[NSUserDefaults standardUserDefaults] synchronize];
-
+	
 }
-	 
+
 - (float)YValueForXValue:(float)xValue inGraphView:(GraphView *)sender {
 	
 	// Find the corresponding Y value by passing the x value to the calculator Brain
 	id yValue = [CalculatorBrain runProgram:self.program usingVariableValues:
 					 [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:xValue] 
 														  forKey:@"x"]];
-
+	
 	return ((NSNumber *)yValue).floatValue;	
 }
 
