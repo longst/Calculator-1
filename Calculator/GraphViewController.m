@@ -11,12 +11,13 @@
 #import "GraphView.h"
 #import "CalculatorViewController.h"
 
-@interface GraphViewController () <GraphViewDataSource, MasterViewControllerPopoverDelegate>
+@interface GraphViewController () <GraphViewDataSource>
 
 @property (nonatomic, weak) IBOutlet GraphView *graphView;
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 
-@property (strong, nonatomic) UIPopoverController *popover;
+@property (strong, nonatomic) UIPopoverController *masterPopOverController;
+
 
 @end
 
@@ -25,14 +26,16 @@
 @synthesize program = _program;
 @synthesize graphView = _graphView;
 @synthesize toolbar = _toolbar;
-@synthesize popover = _popover;
+@synthesize masterPopOverController	= _masterPopOverController;
 
-@synthesize masterViewController = _masterViewController;
-
-
-- (id)masterViewController {
-	return [self.splitViewController.viewControllers objectAtIndex:0];	
+- (void)viewDidLoad {
+	
+	// Set the master view controller to be a popover controller
+	self.masterPopOverController = [[UIPopoverController alloc] 
+											  initWithContentViewController:
+											  [self.splitViewController.viewControllers objectAtIndex:0]];	
 }
+
 
 - (void)awakeFromNib {
 	[super awakeFromNib];
@@ -60,8 +63,6 @@
 	// Show the bar button item on the toolbar
 	barButtonItem.title = aViewController.title;
 	
-	//self.popover = [[UIPopoverController alloc] initWithContentViewController:aViewController];
-	
 	barButtonItem.target = self;
 	barButtonItem.action = @selector(barButtonPressed:);
 		
@@ -75,17 +76,12 @@
 
 - (void)barButtonPressed:(id) sender {	
 	
-	//[self.popover presentPopoverFromBarButtonItem:sender 
-	//						permittedArrowDirections:UIPopoverArrowDirectionAny 
-	//											 animated:YES];
+	[self.masterPopOverController presentPopoverFromBarButtonItem:sender 
+						permittedArrowDirections:UIPopoverArrowDirectionAny 
+												 animated:YES];
   	
-   [self performSegueWithIdentifier:@"ShowCalculator" sender:self];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-	[segue.destinationViewController setPopoverDelegate:self];	
-	self.popover = ((UIStoryboardPopoverSegue *)segue).popoverController;
-}
 
 - (void) splitViewController:(UISplitViewController *)svc 
 		willShowViewController:(UIViewController *)aViewController 
@@ -96,7 +92,7 @@
 	[toolbarItems removeObject:barButtonItem];
 	self.toolbar.items = toolbarItems;
 	
-	if (self.popover) [self.popover dismissPopoverAnimated:YES];
+	if (self.masterPopOverController) [ self.masterPopOverController dismissPopoverAnimated:YES];
 	
 }
 

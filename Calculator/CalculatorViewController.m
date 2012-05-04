@@ -22,7 +22,6 @@
 @synthesize display = _display;
 @synthesize calculation = _calculation;
 @synthesize variables = _variables;
-@synthesize popoverDelegate = _popoverDelegate;
 @synthesize brain = _brain;
 
 @synthesize userIsInTheMiddleOfEnteringNumber;
@@ -36,13 +35,11 @@
 
 
 - (GraphViewController *)graphViewController {
-	return self.popoverDelegate ? 
-	self.popoverDelegate :[self.splitViewController.viewControllers lastObject];
+	return [self.splitViewController.viewControllers lastObject];
 }
 
 
 - (CalculatorBrain *)brain {
-	if (self.popoverDelegate) _brain = [[self.popoverDelegate masterViewController] brain];
 	if (!_brain) _brain = [[CalculatorBrain alloc] init];
 	return _brain;
 }
