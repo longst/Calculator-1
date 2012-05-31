@@ -91,8 +91,6 @@
 		0FF08959153DC9C000E7BCB8 /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
-				0FF08962153DC9C100E7BCB8 /* CalculatorAppDelegate.h */,
-				0FF08963153DC9C100E7BCB8 /* CalculatorAppDelegate.m */,
 				0FF0896B153DC9C200E7BCB8 /* CalculatorViewController.h */,
 				0FF0896C153DC9C200E7BCB8 /* CalculatorViewController.m */,
 				0FF08978153DCA3100E7BCB8 /* iPad.storyboard */,
@@ -113,6 +111,8 @@
 		0FF0895A153DC9C000E7BCB8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0FF08963153DC9C100E7BCB8 /* CalculatorAppDelegate.m */,
+				0FF08962153DC9C100E7BCB8 /* CalculatorAppDelegate.h */,
 				0FF0895B153DC9C000E7BCB8 /* Calculator-Info.plist */,
 				0FF0895C153DC9C000E7BCB8 /* InfoPlist.strings */,
 				0FF0895F153DC9C000E7BCB8 /* main.m */,

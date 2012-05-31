@@ -288,6 +288,7 @@ usingVariableValues:(NSDictionary *)variableValues {
 	return [self popOperandOffProgramStack:stack];	
 }
 
+
 + (NSSet *)variablesUsedInProgram:(id)program {	
 	
 	// Ensure program is valid

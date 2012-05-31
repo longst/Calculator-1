@@ -461,13 +461,14 @@
                             <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="N28-bY-841">
                                 <rect key="frame" x="221" y="5" width="79" height="27"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <accessibility key="accessibilityConfiguration" label="No"/>
                                 <connections>
                                     <action selector="drawModeSwitched:" destination="2" eventType="valueChanged" id="DTy-e4-s4Q"/>
                                     <action selector="drawModeSwitched:" destination="gLw-zT-iBl" eventType="valueChanged" id="FBT-cH-H3N"/>
                                 </connections>
                             </switch>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Draw in dot mode" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="BHb-q7-uYk">
-                                <rect key="frame" x="20" y="8" width="138" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Discontinous function:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" id="BHb-q7-uYk">
+                                <rect key="frame" x="20" y="8" width="175" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>

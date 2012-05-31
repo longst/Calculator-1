@@ -55,7 +55,7 @@
 - (NSDictionary *)testVariableValues {
 	if (!_testVariableValues) {
 		_testVariableValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithDouble:5], @"x",
+									  [NSNumber numberWithDouble:0], @"x",
 									  [NSNumber numberWithDouble:4.8], @"a",
 									  [NSNumber numberWithDouble:0], @"b", nil];
 	}
